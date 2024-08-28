@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Whitelist Domain</title>
+    <link rel="stylesheet" href="style.css?a=1">
+    <script>
+        function whitelistDomain(event) {
+            event.preventDefault(); // Prevent the form from submitting the traditional way
+
+            const domain = document.getElementById('domain').value;
+
+            // Create an AJAX request
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', 'whitelist-add.php', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    // Display the response
+                    document.getElementById('result').innerHTML = xhr.responseText;
+                } else {
+                    document.getElementById('result').innerHTML = 'An error occurred.';
+                }
+            };
+
+            xhr.send('domain=' + encodeURIComponent(domain));
+        }
+
+        function listWhitelistedDomains(event) {
+            event.preventDefault();
+
+            // Create an AJAX request to list whitelisted domains
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', 'whitelist-add.php', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    // Display the response
+                    document.getElementById('result').innerHTML = xhr.responseText;
+                } else {
+                    document.getElementById('result').innerHTML = 'An error occurred.';
+                }
+            };
+
+            xhr.send('action=list');
+        }
+
+        function disableForXMin(event) {
+            if (confirm("💥💥Only do this if necessary!!💥💥\n\nIt is always better to add a domain to the whitelist")) {
+                event.preventDefault(); // Prevent default button action
+
+                // Create an AJAX request to list whitelisted domains
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', 'whitelist-add.php', true);
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+                xhr.onload = function() {
+                    if (xhr.status === 200) {
+                        // Display the response
+                        document.getElementById('result').innerHTML = xhr.responseText;
+                    } else {
+                        document.getElementById('result').innerHTML = 'An error occurred.';
+                    }
+                };
+
+                xhr.send('action=disable');
+            } else {
+                document.getElementById('result').innerHTML = "Canceled Disabling All Blocking";
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="main">
+        <h1>Whitelist a Domain</h1>
+        <div class="content">
+            <form onsubmit="whitelistDomain(event)">
+                <label for="domain">Domain:</label>
+                <br>
+                <br>
+                <input type="text" id="domain" name="domain" placeholder="ads.google.com" required>
+                <br>
+                <br>
+                <button type="submit">Whitelist</button>
+            </form>
+            <div class="but2cont">
+                <button class="button2" onclick="listWhitelistedDomains(event)">List Whitelisted Domains</button>
+            </div>
+            <div id="result"></div>
+            <br>
+            <br>
+            <hr>
+            <div class="but2cont">
+                <button class="button2" onclick="disableForXMin(event)">Disable All Blocking for 5 Min</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
